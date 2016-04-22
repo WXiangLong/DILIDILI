@@ -34,6 +34,10 @@
     
     _rootView.userInteractionEnabled = NO;
 
+    
+    
+    
+    
     AppDelegate * app = [UIApplication sharedApplication].delegate;
     
     [app.window.rootViewController.view addSubview:_rootView];
