@@ -16,19 +16,10 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bjM-Xa-0kU">
                         <rect key="frame" x="0.0" y="0.0" width="176" height="151"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UFh-ZR-g0A">
-                        <rect key="frame" x="38" y="26" width="100" height="100"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="100" id="XrO-Od-God"/>
-                            <constraint firstAttribute="width" constant="100" id="bVm-tW-pv8"/>
-                        </constraints>
-                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
-                <constraint firstItem="UFh-ZR-g0A" firstAttribute="centerY" secondItem="bjM-Xa-0kU" secondAttribute="centerY" id="3s6-tJ-vz2"/>
-                <constraint firstItem="UFh-ZR-g0A" firstAttribute="centerX" secondItem="bjM-Xa-0kU" secondAttribute="centerX" id="6rU-kE-9lZ"/>
                 <constraint firstItem="bjM-Xa-0kU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="CUG-sW-cPP"/>
                 <constraint firstAttribute="bottom" secondItem="bjM-Xa-0kU" secondAttribute="bottom" id="G1D-e0-2c3"/>
                 <constraint firstItem="bjM-Xa-0kU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="VQY-GH-Sun"/>
@@ -37,7 +28,6 @@
             <size key="customSize" width="176" height="151"/>
             <connections>
                 <outlet property="bgImageVIew" destination="bjM-Xa-0kU" id="c9h-Oe-dCg"/>
-                <outlet property="playImageView" destination="UFh-ZR-g0A" id="fZe-rU-WDh"/>
             </connections>
             <point key="canvasLocation" x="345" y="305.5"/>
         </collectionViewCell>

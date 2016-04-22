@@ -13,8 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *bgImageVIew;
 
-@property (weak, nonatomic) IBOutlet UIImageView *playImageView;
-
 
 - (void)updateCell:(HotRankingModel *)model tag:(NSInteger)tag;
 

@@ -25,6 +25,11 @@
 
 @property (nonatomic) DetailViewViewController * detailVVC;
 
+// 开始时x的偏移量
+@property (nonatomic) float oldX;
+// 滚动时x的偏移量
+@property (nonatomic) float newX;
+
 @end
 
 @implementation DetailViewController
@@ -48,6 +53,8 @@
     _detailVVC = [[DetailViewViewController alloc] init];
     
     HotRankingModel * model = _dataSource[_indexPath.row];
+    
+    [_detailVVC createNextViewModel:model];
     
     [_detailVVC createCurrentViewModel:model];
 }
@@ -118,27 +125,8 @@
     
     return cell;
 }
-// 实现上下两个collectionView的联动
-- (void)scrollViewDidScroll:(UIScrollView *)collectionView
-{
-    
-    if (collectionView.tag == 101)
-    {
-        NSLog(@"bottom == %f",collectionView.contentOffset.x);
-        
-        _topCollectionView.contentOffset = collectionView.contentOffset;
-        
-        NSLog(@"top == %lf",_topCollectionView.contentOffset.x);
-    }
-    else
-    {
-        NSLog(@"top == %lf",_topCollectionView.contentOffset.x);
-        
-        _bottomCollectionView.contentOffset = collectionView.contentOffset;
-        
-        NSLog(@"bottom == %f",_bottomCollectionView.contentOffset.x);
-    }
-}
+
+// 点击collectionViewCell调用的方法
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView == _topCollectionView)
@@ -150,6 +138,48 @@
         _mpVC.playUrl = [model.playInfo lastObject][@"url"];
         
         [self presentViewController:_mpVC animated:YES completion:nil];
+    }
+}
+// 行将要出现时调用
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    HotRankingModel * model = self.dataSource[indexPath.row];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"willDisplayCell" object:model];
+}
+// 开始滚动时调用的方法
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _oldX = _topCollectionView.contentOffset.x;
+}
+// 滚动时调用的方法
+// 实现上下两个collectionView的联动
+- (void)scrollViewDidScroll:(UIScrollView *)collectionView
+{
+    _newX = _topCollectionView.contentOffset.x;
+    
+    // 滚动，发送通知，改变透明度
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollBegan" object:@{@"oldX":@(_oldX),@"newX":@(_newX)}];
+    
+    if (collectionView.tag == 101)
+    {
+        _topCollectionView.contentOffset = collectionView.contentOffset;
+    }
+    else
+    {
+        _bottomCollectionView.contentOffset = collectionView.contentOffset;
+    }
+}
+// 滚动结束
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (_topCollectionView.contentOffset.x != _oldX)
+    {
+        int page = (_topCollectionView.contentOffset.x)/SW;
+        
+        HotRankingModel * model = self.dataSource[page];
+        // 滚动结束，发送通知，改变UI
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollEnd" object:model];
     }
 }
 #pragma 上滑手势

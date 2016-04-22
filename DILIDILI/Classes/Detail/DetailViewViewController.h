@@ -13,6 +13,10 @@
 
 @property (nonatomic) UIView * rootView;
 
+@property (nonatomic) UIView * nextView;
+
 - (void) createCurrentViewModel:(HotRankingModel *)model;
+
+- (void) createNextViewModel:(HotRankingModel *)model;
 
 @end
