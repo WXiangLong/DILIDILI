@@ -32,15 +32,49 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     if (self) {
         // Initialization code
         
-//        _statusLabel = [[UILabel alloc] init];
-//        _statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//        _statusLabel.font = [UIFont boldSystemFontOfSize:13];
-//        _statusLabel.textColor = JHRefreshLabelTextColor;
-//        _statusLabel.backgroundColor = [UIColor clearColor];
-//        _statusLabel.textAlignment = NSTextAlignmentCenter;
-//        [self addSubview:_statusLabel];
-//        _statusLabel.text = JHRefreshHeaderStatusTextNormal;
-//        
+        _statusLabel = [[UILabel alloc] init];
+        _statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _statusLabel.font = [UIFont boldSystemFontOfSize:13];
+        _statusLabel.textColor = JHRefreshLabelTextColor;
+        _statusLabel.backgroundColor = [UIColor clearColor];
+        _statusLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:_statusLabel];
+        
+        
+        //设置时间输出格式：
+        NSDateFormatter * df = [[NSDateFormatter alloc] init ];
+        
+        [df setDateFormat:@"HH:mm"];
+        
+        // 获取系统当前时间
+        NSDate * date = [NSDate date];
+        NSString * dateStr = [df stringFromDate:date];
+        
+        NSLog(@"系统当前时间为：%@",dateStr);
+        
+        // 分割字符串
+        NSArray *array = [dateStr componentsSeparatedByString:@":"];
+        
+        // 判断是12  还是  24
+        if (12 <= [array[0] integerValue] && [array[0] integerValue] < 24)
+        {
+            // 接下来是24
+            NSInteger hour = 23 - [array[0] integerValue];
+            
+            NSInteger min = 59 - [array[1] integerValue];
+            
+            _statusLabel.text = [NSString stringWithFormat:@"距离更新还有%ld小时%ld分",hour,min];
+        }
+        else
+        {
+            // 接下来是12
+            NSInteger hour = 11 - [array[0] integerValue];
+            
+            NSInteger min = 60 - [array[1] integerValue];
+            
+            _statusLabel.text = [NSString stringWithFormat:@"距离更新还有%ld小时%ld分",hour,min];
+        }
+        
 //        _lastUpdateTimeLabel = [[UILabel alloc] init];
 //        _lastUpdateTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 //        _lastUpdateTimeLabel.font = [UIFont boldSystemFontOfSize:13];
@@ -49,7 +83,7 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
 //        _lastUpdateTimeLabel.textAlignment = NSTextAlignmentCenter;
 //        [self addSubview:_lastUpdateTimeLabel];
 //        _lastUpdateTimeLabel.text = [JHRefreshConfig getLastUpdateTimeWithRefreshViewID:self.refreshViewID];
-//        
+//
 //        _arrowImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:JHRefreshSrcName(@"arrow")]];
 //        _arrowImgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
 //        [self addSubview:_arrowImgView];
@@ -69,7 +103,7 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     
     if(self.refreshViewType == JHRefreshViewTypeFooter)
     {
-        _statusLabel.text = JHRefreshFooterStatusTextNormal;
+//        _statusLabel.text = JHRefreshFooterStatusTextNormal;
         _arrowImgView.transform = CGAffineTransformMakeRotation(M_PI);
         _lastUpdateTimeLabel.hidden = YES;
     }
@@ -95,7 +129,9 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     switch (self.refreshViewType) {
         case JHRefreshViewTypeHeader:
         {
-            _statusLabel.text = JHRefreshHeaderStatusTextPulling;
+//            _statusLabel.text = JHRefreshHeaderStatusTextPulling;
+            
+            
             
             [UIView animateWithDuration:JHRefreshFastAnimationDuration animations:^{
                 _arrowImgView.transform = CGAffineTransformMakeRotation(M_PI);
@@ -104,7 +140,9 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
             break;
         case JHRefreshViewTypeFooter:
         {
-            _statusLabel.text = JHRefreshFooterStatusTextPulling;
+//            _statusLabel.text = JHRefreshFooterStatusTextPulling;
+            
+            [self setFrame:CGRectMake(0, 0, 0, 0)];
             
             [UIView animateWithDuration:JHRefreshFastAnimationDuration animations:^{
                 _arrowImgView.transform = CGAffineTransformIdentity;
@@ -118,7 +156,7 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     switch (self.refreshViewType) {
         case JHRefreshViewTypeHeader:
         {
-            _statusLabel.text = JHRefreshHeaderStatusTextNormal;
+//            _statusLabel.text = JHRefreshHeaderStatusTextNormal;
             
             [UIView animateWithDuration:JHRefreshFastAnimationDuration animations:^{
                 _arrowImgView.transform = CGAffineTransformIdentity;
@@ -127,7 +165,7 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
             break;
         case JHRefreshViewTypeFooter:
         {
-            _statusLabel.text = JHRefreshFooterStatusTextNormal;
+//            _statusLabel.text = JHRefreshFooterStatusTextNormal;
             
             [UIView animateWithDuration:JHRefreshFastAnimationDuration animations:^{
                 _arrowImgView.transform = CGAffineTransformMakeRotation(M_PI);
@@ -141,12 +179,12 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     switch (self.refreshViewType) {
         case JHRefreshViewTypeHeader:
         {
-            _statusLabel.text = JHRefreshHeaderStatusTextRefreshing;
+//            _statusLabel.text = @"距离下次更新。。。。。。";
         }
             break;
         case JHRefreshViewTypeFooter:
         {
-            _statusLabel.text = JHRefreshFooterStatusTextRefreshing;
+//            _statusLabel.text = JHRefreshFooterStatusTextRefreshing;
         }
             break;
     }
@@ -165,12 +203,12 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
                     break;
                 case JHRefreshResultSuccess:
                 {
-                    _statusLabel.text = JHRefreshHeaderStatusTextSuccess;
+//                    _statusLabel.text = JHRefreshHeaderStatusTextSuccess;
                 }
                     break;
                 case JHRefreshResultFailure:
                 {
-                    _statusLabel.text = JHRefreshHeaderStatusTextFailure;
+//                    _statusLabel.text = JHRefreshHeaderStatusTextFailure;
                 }
                     break;
             }
@@ -180,7 +218,7 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
             break;
         case JHRefreshViewTypeFooter:
         {
-            _statusLabel.text = JHRefreshHeaderStatusTextNormal;
+//            _statusLabel.text = JHRefreshHeaderStatusTextNormal;
             
             _arrowImgView.transform = CGAffineTransformMakeRotation(M_PI);
         }

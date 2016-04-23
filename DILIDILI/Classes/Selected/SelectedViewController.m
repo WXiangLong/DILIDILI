@@ -13,6 +13,7 @@
 #import "TempViewController.h"
 #import "DetailViewController.h"
 #import "EGOCache.h"
+#import "JHRefresh.h"
 
 @interface SelectedViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -21,6 +22,12 @@
 @property (nonatomic) UITableView * tableView;
 
 @property (nonatomic) DetailViewController * detailVC;
+
+@property (nonatomic) NSString * url;
+
+@property (nonatomic) NSInteger count;
+
+@property (nonatomic) BOOL isRefresh;
 
 @end
 
@@ -31,7 +38,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _count = 2;
+    
     [self createTableView];
+    
+    [self createRefreshHeaderView];
+    
+    [self createRefreshFootView];
+    
+    _url = [NSString stringWithFormat:dayChose,_count];
     
     [self fetchData];
     
@@ -45,10 +60,9 @@
 {
     if (_tableView == nil)
     {
-        // 需要子类确定frame
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, SW, SH - 49 - 64)];
         
-        _tableView.bounces = NO;
+//        _tableView.bounces = NO;
         
         _tableView.delegate = self;
         
@@ -109,31 +123,88 @@
 #pragma mark - 获取数据
 - (void) fetchData
 {
-    NSString * url = dayChose;
-    
-    if ([[EGOCache globalCache] hasCacheForKey:@"daychose"])
+    if ([[EGOCache globalCache] hasCacheForKey:@"daychose"] && _count == 5)
     {
         id cacheData = [[EGOCache globalCache] objectForKey:@"daychose"];
         
         self.dataSource = [SelectedModel parseData:cacheData];
         
         [_tableView reloadData];
+        
+        [self endRefreshing];
     }
     else
     {
-        [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+        [[NetDataEngine sharedInstance] requestAppHome:_url success:^(id respondObject) {
             
-            [[EGOCache globalCache] setObject:respondObject forKey:@"daychose"];
-            
+            if (_count == 5)
+            {
+                [[EGOCache globalCache] setObject:respondObject forKey:@"daychose"];
+            }
             self.dataSource = [SelectedModel parseData:respondObject];
             
             [_tableView reloadData];
+            
+            [self endRefreshing];
             
         } falied:^(NSError *error) {
             
         }];
     }
 }
+
+#pragma mark - 下拉刷新
+- (void) createRefreshHeaderView
+{
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView addRefreshHeaderViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        
+        if (weakSelf.isRefresh)
+        {
+            return ;
+        }
+        weakSelf.isRefresh = YES;
+        
+        weakSelf.count = 2;
+        
+        weakSelf.url = [NSString stringWithFormat:dayChose,weakSelf.count];
+        
+        [weakSelf fetchData];
+    }];
+}
+#pragma mark - 上拉加载
+- (void) createRefreshFootView
+{
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView addRefreshFooterViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        
+        if (weakSelf.isRefresh)
+        {
+            return ;
+        }
+        weakSelf.isRefresh = YES;
+        
+        weakSelf.count = weakSelf.count + 2;
+        
+        weakSelf.url = [NSString stringWithFormat:dayChose,weakSelf.count];
+        
+        [weakSelf fetchData];
+        
+    }];
+}
+#pragma mark - 结束刷新
+- (void) endRefreshing
+{
+    self.isRefresh = NO;
+    
+    [self.tableView headerEndRefreshingWithResult:JHRefreshResultSuccess];
+    
+    [self.tableView footerEndRefreshing];
+}
+
+
 
 - (void) pushToDetailViewController:(NSNotification *)info
 {

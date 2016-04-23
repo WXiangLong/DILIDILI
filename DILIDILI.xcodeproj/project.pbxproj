@@ -642,10 +642,10 @@
 		FD70B81B1CC9C6BA00F40593 /* Selected */ = {
 			isa = PBXGroup;
 			children = (
-				FD70B81C1CC9C6BA00F40593 /* SelectedModel.h */,
-				FD70B81D1CC9C6BA00F40593 /* SelectedModel.m */,
 				FD70B81E1CC9C6BA00F40593 /* SelectedViewController.h */,
 				FD70B81F1CC9C6BA00F40593 /* SelectedViewController.m */,
+				FD70B81C1CC9C6BA00F40593 /* SelectedModel.h */,
+				FD70B81D1CC9C6BA00F40593 /* SelectedModel.m */,
 			);
 			path = Selected;
 			sourceTree = "<group>";
