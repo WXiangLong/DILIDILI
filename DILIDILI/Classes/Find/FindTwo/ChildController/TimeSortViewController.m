@@ -32,7 +32,7 @@
 
 - (NSString *)getCategry
 {
-    return [NSString stringWithFormat:@"%@sharesory",_categaryId];
+    return [NSString stringWithFormat:@"%@timeSort",_categaryId];
 }
 
 - (void)viewDidLoad {

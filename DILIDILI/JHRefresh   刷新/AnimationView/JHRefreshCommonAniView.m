@@ -32,32 +32,32 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
     if (self) {
         // Initialization code
         
-        _statusLabel = [[UILabel alloc] init];
-        _statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _statusLabel.font = [UIFont boldSystemFontOfSize:13];
-        _statusLabel.textColor = JHRefreshLabelTextColor;
-        _statusLabel.backgroundColor = [UIColor clearColor];
-        _statusLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:_statusLabel];
-        _statusLabel.text = JHRefreshHeaderStatusTextNormal;
-        
-        _lastUpdateTimeLabel = [[UILabel alloc] init];
-        _lastUpdateTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _lastUpdateTimeLabel.font = [UIFont boldSystemFontOfSize:13];
-        _lastUpdateTimeLabel.textColor = JHRefreshLabelTextColor;
-        _lastUpdateTimeLabel.backgroundColor = [UIColor clearColor];
-        _lastUpdateTimeLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:_lastUpdateTimeLabel];
-        _lastUpdateTimeLabel.text = [JHRefreshConfig getLastUpdateTimeWithRefreshViewID:self.refreshViewID];
-        
-        _arrowImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:JHRefreshSrcName(@"arrow")]];
-        _arrowImgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
-        [self addSubview:_arrowImgView];
-        
-        _activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        _activityView.bounds = _arrowImgView.bounds;
-        _activityView.autoresizingMask = _arrowImgView.autoresizingMask;
-        [self addSubview:_activityView];
+//        _statusLabel = [[UILabel alloc] init];
+//        _statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        _statusLabel.font = [UIFont boldSystemFontOfSize:13];
+//        _statusLabel.textColor = JHRefreshLabelTextColor;
+//        _statusLabel.backgroundColor = [UIColor clearColor];
+//        _statusLabel.textAlignment = NSTextAlignmentCenter;
+//        [self addSubview:_statusLabel];
+//        _statusLabel.text = JHRefreshHeaderStatusTextNormal;
+//        
+//        _lastUpdateTimeLabel = [[UILabel alloc] init];
+//        _lastUpdateTimeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        _lastUpdateTimeLabel.font = [UIFont boldSystemFontOfSize:13];
+//        _lastUpdateTimeLabel.textColor = JHRefreshLabelTextColor;
+//        _lastUpdateTimeLabel.backgroundColor = [UIColor clearColor];
+//        _lastUpdateTimeLabel.textAlignment = NSTextAlignmentCenter;
+//        [self addSubview:_lastUpdateTimeLabel];
+//        _lastUpdateTimeLabel.text = [JHRefreshConfig getLastUpdateTimeWithRefreshViewID:self.refreshViewID];
+//        
+//        _arrowImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:JHRefreshSrcName(@"arrow")]];
+//        _arrowImgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+//        [self addSubview:_arrowImgView];
+//        
+//        _activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//        _activityView.bounds = _arrowImgView.bounds;
+//        _activityView.autoresizingMask = _arrowImgView.autoresizingMask;
+//        [self addSubview:_activityView];
         
     }
     return self;

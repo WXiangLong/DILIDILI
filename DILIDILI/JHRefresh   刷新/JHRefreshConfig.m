@@ -8,7 +8,7 @@
 
 #import "JHRefreshConfig.h"
 
-const CGFloat JHRefreshViewHeight = 60.0;
+const CGFloat JHRefreshViewHeight = 0.0;
 const CGFloat JHRefreshFastAnimationDuration = 0.2;
 const CGFloat JHRefreshSlowAnimationDuration = 0.4;
 const CGFloat JHRefreshShowResultAnimationDuration = 0.8;

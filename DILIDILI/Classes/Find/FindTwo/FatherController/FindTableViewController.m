@@ -75,7 +75,19 @@
         [self.view addSubview:_tableView];
     }
 }
-
+#pragma mark - tableView结束
+- (void) tableViewEnd
+{
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SW, 44)];
+    
+    label.textAlignment = NSTextAlignmentCenter;
+    
+    label.text = @"- The End -";
+    
+    label.font = [UIFont fontWithName:@"Lobster 1.4" size:17];
+    
+    _tableView.tableFooterView = label;
+}
 #pragma mark - tableView dataSource And delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -152,21 +164,24 @@
             }
             self.dataSource = [HotRankingModel parseData:respondObject];
             
-            [_tableView reloadData];
-            
-            [self endRefreshing];
-            
+            if (self.dataSource.count % 10 == 0)
+            {
+                [_tableView reloadData];
+                
+                [self endRefreshing];
+            }
+            else
+            {
+                [self endRefreshing];
+                
+                [self tableViewEnd];
+            }
         } falied:^(NSError *error) {
             
         }];
     }
 }
 
-#pragma mark - 下拉刷新
-- (void) createRefreshHeaderView
-{
-    
-}
 #pragma mark - 上拉加载
 - (void) createRefreshFootView
 {
@@ -185,6 +200,7 @@
         [weakSelf getUrlWithStart:weakSelf.start num:weakSelf.count];
         
         [weakSelf fetchData];
+        
     }];
 }
 #pragma mark - 结束刷新
