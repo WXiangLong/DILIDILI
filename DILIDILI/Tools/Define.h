@@ -22,9 +22,9 @@
 
 
 // 时间排行
-#define timeSort @"http://baobab.wandoujia.com/api/v3/videos?categoryId=%@&start=0&num=20&strategy=date"
+#define timeSort @"http://baobab.wandoujia.com/api/v3/videos?categoryId=%@&start=%ld&num=%ld&strategy=date"
 //分享排行
-#define shareSort @"http://baobab.wandoujia.com/api/v3/videos?categoryId=%@&start=0&num=20&strategy=shareCount"
+#define shareSort @"http://baobab.wandoujia.com/api/v3/videos?categoryId=%@&start=%ld&num=%ld&strategy=shareCount"
 
 
 //周排行

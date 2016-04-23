@@ -24,9 +24,14 @@
     return self;
 }
 
-- (NSString *)getUrl
+- (void)getUrlWithStart:(NSInteger)start num:(NSInteger)num
 {
-    return [NSString stringWithFormat:shareSort,_categaryId];
+    self.url = [NSString stringWithFormat:shareSort,_categaryId,start,num];
+}
+
+- (NSString *)getCategry
+{
+    return [NSString stringWithFormat:@"%@sharesory",_categaryId];
 }
 
 

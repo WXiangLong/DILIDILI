@@ -11,12 +11,21 @@
 #import "HotRankingModel.h"
 #import "NetDataEngine.h"
 #import "TempViewController.h"
+#import "EGOCache.h"
+#import "JHRefresh.h"
 
 @interface FindTableViewController () <UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic) NSMutableArray * dataSource;
 
 @property (nonatomic) UITableView * chooseTableView;
+
+
+@property (nonatomic) NSInteger start;
+
+@property (nonatomic) NSInteger count;
+
+@property (nonatomic) BOOL isRefresh;
 
 @end
 
@@ -26,7 +35,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _start = 0;
+    
+    _count = 10;
+    
     [self createTableView];
+    
+    [self createRefreshFootView];
+    
+    [self getUrlWithStart:_start num:_count];
     
     [self fetchData];
     
@@ -41,7 +58,7 @@
         // 需要子类确定frame
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(SW * _num, 0, SW, SH - 64 - 40)];
         
-        _tableView.bounces = NO;
+//        _tableView.bounces = NO;
         
         _tableView.delegate = self;
         
@@ -113,20 +130,70 @@
 #pragma mark - 获取数据
 - (void) fetchData
 {
-    NSString * url = [self getUrl];
+    NSString * categry = [self getCategry];
     
-    [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+    if ([[EGOCache globalCache] hasCacheForKey:categry] && _count == 10)
+    {
+        id cacheData = [[EGOCache globalCache] objectForKey:categry];
         
-        self.dataSource = [HotRankingModel parseData:respondObject];
+        self.dataSource = [HotRankingModel parseData:cacheData];
         
         [_tableView reloadData];
         
-    } falied:^(NSError *error) {
-        
-    }];
+        [self endRefreshing];
+    }
+    else
+    {
+        [[NetDataEngine sharedInstance] requestAppHome:_url success:^(id respondObject) {
+            
+            if (_count == 10)
+            {
+                [[EGOCache globalCache] setObject:respondObject forKey:categry];
+            }
+            self.dataSource = [HotRankingModel parseData:respondObject];
+            
+            [_tableView reloadData];
+            
+            [self endRefreshing];
+            
+        } falied:^(NSError *error) {
+            
+        }];
+    }
 }
 
-
+#pragma mark - 下拉刷新
+- (void) createRefreshHeaderView
+{
+    
+}
+#pragma mark - 上拉加载
+- (void) createRefreshFootView
+{
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView addRefreshFooterViewWithAniViewClass:[JHRefreshCommonAniView class] beginRefresh:^{
+        
+        if (weakSelf.isRefresh)
+        {
+            return ;
+        }
+        weakSelf.isRefresh = YES;
+        
+        weakSelf.count = weakSelf.count + 10;
+        
+        [weakSelf getUrlWithStart:weakSelf.start num:weakSelf.count];
+        
+        [weakSelf fetchData];
+    }];
+}
+#pragma mark - 结束刷新
+- (void) endRefreshing
+{
+    self.isRefresh = NO;
+    
+    [self.tableView footerEndRefreshing];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

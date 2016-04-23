@@ -12,8 +12,12 @@
 
 @property (nonatomic) NSInteger num;
 
+@property (nonatomic) NSString * url;
+
 @property (nonatomic) UITableView * tableView;
 
-- (NSString *) getUrl;
+- (void) getUrlWithStart:(NSInteger)start num:(NSInteger)num;
+
+- (NSString *) getCategry;
 
 @end
