@@ -14,5 +14,6 @@
 
 - (NSString *) getUrl;
 
+- (NSString *) getCategry;
 
 @end

@@ -28,6 +28,10 @@
 {
     return weekSort;
 }
+- (NSString *)getCategry
+{
+    return @"weeksort";
+}
 
 
 - (void)viewDidLoad {

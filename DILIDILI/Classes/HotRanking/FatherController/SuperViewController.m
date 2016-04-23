@@ -10,6 +10,7 @@
 #import "NetDataEngine.h"
 #import "HotRankingTableViewCell.h"
 #import "TempViewController.h"
+#import "EGOCache.h"
 
 
 @interface SuperViewController () <UITableViewDelegate,UITableViewDataSource>
@@ -130,16 +131,30 @@
 {
     NSString * url = [self getUrl];
     
-    [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+    NSString * categry = [self getCategry];
+    
+    if ([[EGOCache globalCache] hasCacheForKey:categry])
+    {
+        id cacheData = [[EGOCache globalCache] objectForKey:categry];
         
-        self.dataSource = [HotRankingModel parseData:respondObject];
+        self.dataSource = [HotRankingModel parseData:cacheData];
         
         [_tableView reloadData];
-        
-    } falied:^(NSError *error) {
-        
-    }];
-
+    }
+    else
+    {
+        [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+            
+            [[EGOCache globalCache] setObject:respondObject forKey:categry];
+            
+            self.dataSource = [HotRankingModel parseData:respondObject];
+            
+            [_tableView reloadData];
+            
+        } falied:^(NSError *error) {
+            
+        }];
+    }
 }
 
 

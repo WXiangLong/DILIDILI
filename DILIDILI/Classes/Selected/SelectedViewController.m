@@ -12,6 +12,7 @@
 #import "HotRankingTableViewCell.h"
 #import "TempViewController.h"
 #import "DetailViewController.h"
+#import "EGOCache.h"
 
 @interface SelectedViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -88,8 +89,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"点击cell");
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HiddenLeftButton" object:nil];
     
     HotRankingTableViewCell *cell = (HotRankingTableViewCell *)[self.tableView cellForRowAtIndexPath: indexPath];
@@ -112,16 +111,28 @@
 {
     NSString * url = dayChose;
     
-    [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+    if ([[EGOCache globalCache] hasCacheForKey:@"daychose"])
+    {
+        id cacheData = [[EGOCache globalCache] objectForKey:@"daychose"];
         
-        self.dataSource = [SelectedModel parseData:respondObject];
+        self.dataSource = [SelectedModel parseData:cacheData];
         
         [_tableView reloadData];
-        
-    } falied:^(NSError *error) {
-        
-    }];
-    
+    }
+    else
+    {
+        [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
+            
+            [[EGOCache globalCache] setObject:respondObject forKey:@"daychose"];
+            
+            self.dataSource = [SelectedModel parseData:respondObject];
+            
+            [_tableView reloadData];
+            
+        } falied:^(NSError *error) {
+            
+        }];
+    }
 }
 
 - (void) pushToDetailViewController:(NSNotification *)info

@@ -28,7 +28,10 @@
 {
     return monthSort;
 }
-
+- (NSString *)getCategry
+{
+    return @"monthsort";
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

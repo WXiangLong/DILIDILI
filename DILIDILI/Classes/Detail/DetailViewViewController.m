@@ -197,15 +197,32 @@
     [_nextView removeFromSuperview];
     
     [_playImageView removeFromSuperview];
+    
+    [_titleThread cancel];
+    [_categryAndTimeThread cancel];
+    [_descriptionThread cancel];
 }
 
 - (void) changeAlpha:(NSNotification *)info
 {
+    [_titleThread cancel];
+    [_categryAndTimeThread cancel];
+    [_descriptionThread cancel];
+    
     float newX = [info.object[@"newX"] floatValue];
     
     float oldX = [info.object[@"oldX"] floatValue];
     
     _rootView.alpha = 1 - fabsf(newX - oldX)/ SW;
+    
+    if (_rootView.alpha == 0)
+    {
+        _titleLabel.text = nil;
+        
+        _categryAndTimeLabel.text = nil;
+        
+        _descriptionLabel.text = nil;
+    }
     
     if (newX != oldX)
     {
@@ -232,15 +249,15 @@
     
 //    if (!(_titleThread.isCancelled))
 //    {
-        [_titleThread cancel];
+//        [_titleThread cancel];
 //    }
 //    if (!(_categryAndTimeThread.isCancelled))
 //    {
-        [_categryAndTimeThread cancel];
+//        [_categryAndTimeThread cancel];
 //    }
 //    if (!(_descriptionThread.isCancelled))
 //    {
-        [_descriptionThread cancel];
+//        [_descriptionThread cancel];
 //    }
     
     HotRankingModel * model = info.object;
@@ -336,7 +353,7 @@
 
 - (void)animationLabel3
 {
-    NSString * str = [NSString stringWithFormat:@"%@     ",_descriptionString];
+    NSString * str = [NSString stringWithFormat:@"%@  ",_descriptionString];
     
     for (NSInteger i = 0; i < str.length; i++)
     {
@@ -352,6 +369,7 @@
         }];
     }
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

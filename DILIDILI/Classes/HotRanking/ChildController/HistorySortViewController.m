@@ -29,6 +29,11 @@
     return historySort;
 }
 
+- (NSString *)getCategry
+{
+    return @"historysort";
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
