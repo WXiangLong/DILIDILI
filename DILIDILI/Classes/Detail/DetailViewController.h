@@ -10,6 +10,8 @@
 
 @interface DetailViewController : BaseViewController
 
+@property (nonatomic) int flag;
+
 @property (nonatomic) UIView * rootView;
 
 @property (nonatomic) NSIndexPath * indexPath;

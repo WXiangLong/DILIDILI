@@ -8,12 +8,18 @@
 
 #import "SelectedViewController.h"
 #import "NetDataEngine.h"
+#import "SelectedModel.h"
+#import "HotRankingTableViewCell.h"
+#import "TempViewController.h"
+#import "DetailViewController.h"
 
 @interface SelectedViewController () <UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic) NSMutableArray * dataSource;
 
 @property (nonatomic) UITableView * tableView;
+
+@property (nonatomic) DetailViewController * detailVC;
 
 @end
 
@@ -23,6 +29,14 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self createTableView];
+    
+    [self fetchData];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToDetailViewController:) name:@"AnimationsEnd" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTableViewOffset:) name:@"ChangeTableViewOffset" object:nil];
 }
 
 #pragma mark - tableView
@@ -31,7 +45,7 @@
     if (_tableView == nil)
     {
         // 需要子类确定frame
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SW, SH - 64 - 40- 49)];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, SW, SH - 49 - 64)];
         
         _tableView.bounces = NO;
         
@@ -57,16 +71,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    HotRankingTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
-//    
-//    if (!cell)
-//    {
-//        cell = [[[NSBundle mainBundle] loadNibNamed:@"HotRankingTableViewCell" owner:self options:nil] lastObject];
-//    }
-//    [cell updateWithSource:self.dataSource :indexPath];
-//    
-//    return cell;
-    return nil;
+    HotRankingTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
+    
+    if (!cell)
+    {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"HotRankingTableViewCell" owner:self options:nil] lastObject];
+    }
+    [cell updateWithSource:self.dataSource :indexPath];
+    
+    return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -76,6 +89,22 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"点击cell");
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"HiddenLeftButton" object:nil];
+    
+    HotRankingTableViewCell *cell = (HotRankingTableViewCell *)[self.tableView cellForRowAtIndexPath: indexPath];
+    
+    CGRect rect = [cell convertRect:cell.bgImageView.frame toView:self.view];
+    
+    HotRankingModel * tempModel = _dataSource[indexPath.row];
+    
+    TempViewController * tempVC = [[TempViewController alloc] init];
+    
+    [tempVC createImageView:1];
+    
+    [tempVC createBottomImageView:tempModel rect:rect indexPath:indexPath dataSource:_dataSource];
+    
+    [tempVC createTopImageView:tempModel rect:rect];
 }
 
 #pragma mark - 获取数据
@@ -85,7 +114,7 @@
     
     [[NetDataEngine sharedInstance] requestAppHome:url success:^(id respondObject) {
         
-//        self.dataSource = [HotRankingModel parseData:respondObject];
+        self.dataSource = [SelectedModel parseData:respondObject];
         
         [_tableView reloadData];
         
@@ -95,9 +124,37 @@
     
 }
 
+- (void) pushToDetailViewController:(NSNotification *)info
+{
+    NSLog(@"%@",info.object);
+    
+    _detailVC = [[DetailViewController alloc] init];
+    
+    _detailVC.indexPath = info.object[@"indexPath"];
+    
+    _detailVC.dataSource = info.object[@"dataSource"];
+    
+    _detailVC.flag = 1;
+    
+    NSLog(@"%@",_detailVC.indexPath);
+    
+    [self addChildViewController:_detailVC];
+#warning 不可不要的NSLog
+    NSLog(@"%@",_detailVC.view.subviews);
+    
+    NSLog(@"%@",_detailVC.rootView);
+    
+    [self.view addSubview:_detailVC.rootView];
+    
+    [self.view bringSubviewToFront:_detailVC.rootView];
+}
 
-
-
+- (void) changeTableViewOffset:(NSNotification *)info
+{
+    float xoffset = [info.object integerValue];
+    
+    [_tableView setContentOffset:CGPointMake(0, xoffset * SW * 387 / 620)];
+}
 
 
 

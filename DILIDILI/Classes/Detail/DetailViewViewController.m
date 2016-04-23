@@ -232,15 +232,15 @@
     
 //    if (!(_titleThread.isCancelled))
 //    {
-//        [_titleThread cancel];
+        [_titleThread cancel];
 //    }
 //    if (!(_categryAndTimeThread.isCancelled))
 //    {
-//        [_categryAndTimeThread cancel];
+        [_categryAndTimeThread cancel];
 //    }
 //    if (!(_descriptionThread.isCancelled))
 //    {
-//        [_descriptionThread cancel];
+        [_descriptionThread cancel];
 //    }
     
     HotRankingModel * model = info.object;

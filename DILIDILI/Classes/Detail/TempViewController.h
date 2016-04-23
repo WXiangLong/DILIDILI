@@ -11,8 +11,7 @@
 #import "SelectedModel.h"
 @interface TempViewController : UIViewController
 
-
-- (void) createImageView;
+- (void) createImageView:(int)flag;
 
 - (void) createTopImageView:(HotRankingModel *)model rect:(CGRect)rect;
 
@@ -21,5 +20,9 @@
 - (void) removeTopImageView:(HotRankingModel *)model;
 
 - (void) removeBottomImageView:(HotRankingModel *)model;
+
+//- (void) removeFirstTopImageView:(HotRankingModel *)model;
+//
+//- (void) removeFirstBottomImageView:(HotRankingModel *)model;
 
 @end

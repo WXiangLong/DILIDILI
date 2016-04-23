@@ -18,7 +18,7 @@
 
 
 //每日精选
-#define dayChose @"http://baobab.wandoujia.com/api/v2/feed?&num=7"
+#define dayChose @"http://baobab.wandoujia.com/api/v2/feed?&num=5"
 
 
 // 时间排行

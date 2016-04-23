@@ -10,20 +10,28 @@
 
 @interface SelectedModel : JSONModel
 
-@property (nonatomic) NSString * id;
+@property (nonatomic, assign) NSInteger id;
 
-@property (nonatomic) NSString * title;
+@property (nonatomic, assign) long long date;
 
-@property (nonatomic) NSString * myDescription;
+@property (nonatomic, assign) NSInteger idx;
 
-@property (nonatomic) NSString * category;
+@property (nonatomic, copy) NSString *title;
 
-@property (nonatomic) NSDictionary * cover;
+@property (nonatomic, copy) NSString *myDescription;
 
-@property (nonatomic) NSString * duration;
+@property (nonatomic, copy) NSString *category;
 
-@property (nonatomic) NSArray * playInfo;
+@property (nonatomic, assign) NSInteger duration;
 
-@property (nonatomic) NSDictionary * consumption;
+@property (nonatomic, copy) NSString *playUrl;
+
+@property (nonatomic, copy) NSArray * playInfo;
+
+@property (nonatomic, copy) NSDictionary * consumption;
+
+@property (nonatomic, copy) NSDictionary * cover;
+
++ (NSMutableArray *) parseData:(id) respondObject;
 
 @end

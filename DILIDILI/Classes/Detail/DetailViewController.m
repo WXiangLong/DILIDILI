@@ -197,7 +197,7 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ChangeTableViewOffset" object:@(page)];
         
-        [tempVC createImageView];
+        [tempVC createImageView:_flag];
         
         [tempVC removeBottomImageView:tempModel];
         

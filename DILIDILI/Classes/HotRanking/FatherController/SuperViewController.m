@@ -109,7 +109,7 @@
     
     TempViewController * tempVC = [[TempViewController alloc] init];
     
-    [tempVC createImageView];
+    [tempVC createImageView:0];
     
     [tempVC createBottomImageView:tempModel rect:rect indexPath:indexPath dataSource:_dataSource];
     
