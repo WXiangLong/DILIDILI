@@ -50,7 +50,6 @@ NSString *const JHRefreshFooterStatusTextFailure = @"加载失败";
         NSDate * date = [NSDate date];
         NSString * dateStr = [df stringFromDate:date];
         
-        NSLog(@"系统当前时间为：%@",dateStr);
         
         // 分割字符串
         NSArray *array = [dateStr componentsSeparatedByString:@":"];

@@ -14,7 +14,7 @@
 #define SF [UIScreen mainScreen].bounds
 
 // 搜索
-#define Search @"http://baobab.wandoujia.com/api/v1/search?num=20&query=%@"
+#define Search @"http://baobab.wandoujia.com/api/v1/search?num=10&query=%@"
 
 
 //每日精选

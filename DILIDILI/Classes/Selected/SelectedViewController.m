@@ -123,7 +123,7 @@
 #pragma mark - 获取数据
 - (void) fetchData
 {
-    if ([[EGOCache globalCache] hasCacheForKey:@"daychose"] && _count == 5)
+    if ([[EGOCache globalCache] hasCacheForKey:@"daychose"] && _count == 2)
     {
         id cacheData = [[EGOCache globalCache] objectForKey:@"daychose"];
         
@@ -137,7 +137,7 @@
     {
         [[NetDataEngine sharedInstance] requestAppHome:_url success:^(id respondObject) {
             
-            if (_count == 5)
+            if (_count == 2)
             {
                 [[EGOCache globalCache] setObject:respondObject forKey:@"daychose"];
             }

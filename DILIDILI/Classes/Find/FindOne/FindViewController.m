@@ -51,11 +51,16 @@
 // 点击搜索按钮调用的方法
 - (void) clickSearchButton
 {
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0;
+    transition.type = kCATransitionMoveIn;
+    transition.subtype = kCATransitionFromBottom;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    
     SearchViewController * searchVC = [[SearchViewController alloc] init];
     
-    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:searchVC];
-    
-    [self presentViewController:nav animated:YES completion:nil];
+    [self.navigationController pushViewController:searchVC animated:NO];
 }
 
 #pragma mark - 创建数据源

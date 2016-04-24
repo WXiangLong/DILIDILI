@@ -11,12 +11,11 @@
 #import "HotRankingTableViewCell.h"
 #import "HotRankingModel.h"
 #import "TempViewController.h"
+#import "DetailViewController.h"
 
 @interface SearchViewController () <UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic) UILabel * label;
-
-@property (nonatomic) UIView * searchView;
 
 @property (nonatomic) UITableView * tableView;
 
@@ -26,7 +25,7 @@
 
 @property (nonatomic) NSInteger count;
 
-@property (nonatomic) UITableView * chooseTableView;
+@property (nonatomic) DetailViewController * detailVC;
 
 @end
 
@@ -37,40 +36,35 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationController.navigationBar.backgroundColor = [UIColor blueColor];
-    
-    self.navigationController.navigationBar.translucent = NO;
-    
-    [self createSearchView];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        
-        _searchView.frame = CGRectMake(0, 0, SW, SH);
-    }];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTableViewOffset:) name:@"ChangeTableViewOffset" object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToDetailViewController:) name:@"AnimationsEnd" object:nil];
+
+    [self createSearchView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = YES;
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void) createSearchView
 {
-    _searchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SW, SH)];
-    
-    _searchView.backgroundColor = [UIColor whiteColor];
-    
-    UIView *searchView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SW, 44)];
-    
-    UISearchBar * searchBar= [[UISearchBar alloc]initWithFrame:searchView.frame];
+    UISearchBar * searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 20, SW, 44)];
     
     searchBar.placeholder = @"帮你快速找到往期视频";
     
     searchBar.delegate = self;
     
-    [searchView addSubview:searchBar];
+    [self.view addSubview:searchBar];
     
-    [self.navigationController.navigationBar addSubview:searchView];
     
-    _label = [[UILabel alloc]initWithFrame:CGRectMake(0, 20, SW, 20)];
+    
+    _label = [[UILabel alloc]initWithFrame:CGRectMake(0, searchBar.frame.origin.y + searchBar.frame.size.height + SH*0.01, SW, 20)];
     
     _label.textAlignment = NSTextAlignmentCenter;
     
@@ -80,9 +74,7 @@
     
     _label.textColor = [UIColor grayColor];
     
-    [_searchView addSubview:_label];
-    
-    [self.view addSubview:_searchView];
+    [self.view addSubview:_label];
 }
 //让按钮显示
 -(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
@@ -98,13 +90,20 @@
     return YES;
 }
 // 点击cancel 按钮调用的方法
--(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+-(void) searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     //textfield的第一响应者状态就会取消，然后键盘就消失了
     //结束搜索状态
     [searchBar resignFirstResponder];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    CATransition *transition = [CATransition animation];
+//    transition.duration = 0;
+//    transition.type = kCATransitionMoveIn;
+//    transition.subtype = kCATransitionFromBottom;
+//    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    
+    [self.navigationController popViewControllerAnimated:NO];
 }
 // 执行搜索 时的方法
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -124,9 +123,7 @@
         [_tableView removeFromSuperview];
     }
     // 需要子类确定frame
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SW, SH - 64)];
-    
-    _tableView.bounces = NO;
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, SW, SH - 64)];
     
     _tableView.delegate = self;
     
@@ -166,7 +163,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SW, 44)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SW, 40)];
     
     label.text = [NSString stringWithFormat:@"-「%@」搜索结果共%ld个-",self.searchString,self.count];
     
@@ -183,14 +180,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 44;
+    return 40;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"点击cell");
-    
-    _chooseTableView = tableView;
     
     HotRankingTableViewCell *cell = (HotRankingTableViewCell *)[self.tableView cellForRowAtIndexPath: indexPath];
     
@@ -211,9 +206,7 @@
 {
     float xoffset = [info.object integerValue];
     
-    [_chooseTableView setContentOffset:CGPointMake(0, xoffset * SW * 387 / 620)];
-    
-    _chooseTableView = nil;
+    [_tableView setContentOffset:CGPointMake(0, xoffset * SW * 387 / 620)];
 }
 
 #pragma mark - 获取数据
@@ -274,8 +267,32 @@
         
         label.numberOfLines = 0;
         
-        [_searchView addSubview:label];
+        [self.view addSubview:label];
     }
+}
+
+
+- (void) pushToDetailViewController:(NSNotification *)info
+{
+    NSLog(@"%@",info.object);
+    
+    _detailVC = [[DetailViewController alloc] init];
+    
+    _detailVC.indexPath = info.object[@"indexPath"];
+    
+    _detailVC.dataSource = info.object[@"dataSource"];
+    
+    NSLog(@"%@",_detailVC.indexPath);
+    
+    [self addChildViewController:_detailVC];
+#warning 不可不要的NSLog
+    NSLog(@"%@",_detailVC.view.subviews);
+    
+    NSLog(@"%@",_detailVC.rootView);
+    
+    [self.view addSubview:_detailVC.rootView];
+    
+    [self.view bringSubviewToFront:_detailVC.rootView];
 }
 
 - (void)didReceiveMemoryWarning {
