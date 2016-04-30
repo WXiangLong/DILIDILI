@@ -19,6 +19,8 @@
 
 @property (nonatomic) NSMutableArray * dataSource;
 
+@property (nonatomic) id object;;
+
 @property (nonatomic) UITableView * tableView;
 
 @property (nonatomic) DetailViewController * detailVC;
@@ -62,8 +64,6 @@
     {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, SW, SH - 49 - 64)];
         
-//        _tableView.bounces = NO;
-        
         _tableView.delegate = self;
         
         _tableView.dataSource = self;
@@ -92,6 +92,7 @@
     {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"HotRankingTableViewCell" owner:self options:nil] lastObject];
     }
+    
     [cell updateWithSource:self.dataSource :indexPath];
     
     return cell;
@@ -128,6 +129,8 @@
         id cacheData = [[EGOCache globalCache] objectForKey:@"daychose"];
         
         self.dataSource = [SelectedModel parseData:cacheData];
+        
+        _object = cacheData;
         
         [_tableView reloadData];
         
@@ -208,8 +211,6 @@
 
 - (void) pushToDetailViewController:(NSNotification *)info
 {
-    NSLog(@"%@",info.object);
-    
     _detailVC = [[DetailViewController alloc] init];
     
     _detailVC.indexPath = info.object[@"indexPath"];

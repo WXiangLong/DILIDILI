@@ -154,7 +154,7 @@
     
     _categryAndTimeLabel.textColor = [UIColor whiteColor];
     
-    _categryAndTimeString = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,model.duration/60,model.duration%60];
+    _categryAndTimeString = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,[model.duration integerValue]/60,[model.duration integerValue]%60];
     
     _categryAndTimeThread = [[NSThread alloc] initWithTarget:self selector:@selector(animationLabel1) object:nil];
     
@@ -278,7 +278,7 @@
     [_line setFrame:CGRectMake(_line.frame.origin.x, _line.frame.origin.y, contentSize1.width*0.8, _line.frame.size.height)];
     
     // 改变第二个label
-    _categryAndTimeString = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,model.duration/60,model.duration%60];
+    _categryAndTimeString = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,[model.duration integerValue]/60,[model.duration integerValue]%60];
     
     _categryAndTimeThread = [[NSThread alloc] initWithTarget:self selector:@selector(animationLabel1) object:nil];
     

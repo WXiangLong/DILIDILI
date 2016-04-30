@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) NSArray *array;
 
-@property (nonatomic, strong) UIButton *btn;
+
 
 @property (nonatomic, strong) UIButton *button;
 

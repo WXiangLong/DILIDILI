@@ -10,4 +10,6 @@
 
 @interface BaseViewController : UIViewController
 
+@property (nonatomic, strong) UIButton *btn;
+
 @end

@@ -10,27 +10,34 @@
 
 @interface SelectedModel : JSONModel
 
-@property (nonatomic, assign) NSInteger id;
+@property (nonatomic, assign) NSString<Optional>* text;
 
-@property (nonatomic, assign) long long date;
+@property (nonatomic, assign) NSString<Optional>* image;
 
-@property (nonatomic, assign) NSInteger idx;
 
-@property (nonatomic, copy) NSString *title;
 
-@property (nonatomic, copy) NSString *myDescription;
 
-@property (nonatomic, copy) NSString *category;
+@property (nonatomic, assign) NSString<Optional>* id;
 
-@property (nonatomic, assign) NSInteger duration;
+@property (nonatomic, assign) NSString<Optional>* date;
 
-@property (nonatomic, copy) NSString *playUrl;
+@property (nonatomic, assign) NSString<Optional>* idx;
 
-@property (nonatomic, copy) NSArray * playInfo;
+@property (nonatomic, copy) NSString<Optional> *title;
 
-@property (nonatomic, copy) NSDictionary * consumption;
+@property (nonatomic, copy) NSString<Optional> *myDescription;
 
-@property (nonatomic, copy) NSDictionary * cover;
+@property (nonatomic, copy) NSString<Optional> *category;
+
+@property (nonatomic, assign) NSString<Optional>* duration;
+
+@property (nonatomic, copy) NSString<Optional> *playUrl;
+
+@property (nonatomic, copy) NSArray<Optional> * playInfo;
+
+@property (nonatomic, copy) NSDictionary<Optional> * consumption;
+
+@property (nonatomic, copy) NSDictionary<Optional> * cover;
 
 + (NSMutableArray *) parseData:(id) respondObject;
 

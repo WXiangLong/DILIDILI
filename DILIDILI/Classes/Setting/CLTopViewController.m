@@ -25,7 +25,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SW, SH)];
     [self.view addSubview:_scrollView];
     self.view.backgroundColor = [UIColor colorWithWhite:0.87 alpha:1];
@@ -47,7 +46,7 @@
     UIImageView *imageView = [[UIImageView alloc] init];
     
     imageView.image = image;
-    imageView.frame = CGRectMake(SW/2-50, 50, 100, 100);
+    imageView.frame = CGRectMake(SW/2-SW*0.15, SW*0.15, SW*0.3, SW*0.3);
     imageView.layer.borderColor = [UIColor whiteColor].CGColor;
     imageView.layer.borderWidth = 2;
     imageView.layer.masksToBounds = YES;
@@ -62,6 +61,7 @@
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(SW/2-50, CGRectGetMaxY(imageView.frame)+5, 100, 20)];
     [view addSubview:textField];
     textField.borderStyle = UITextBorderStyleNone;
+    textField.textAlignment = NSTextAlignmentCenter;
     self.textField = textField;
     
     
@@ -80,15 +80,17 @@
     
     
     UIView *view1 = [[UIView alloc] initWithFrame:CGRectMake(SW/2-50, CGRectGetMaxY(textField.frame)+8, 100, 1)];
-    [view addSubview:view1];
     view1.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
-    textField.textAlignment = NSTextAlignmentCenter;
+    [view addSubview:view1];
+    
+    
     
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
     btn.frame = CGRectMake(50, CGRectGetMaxY(view1.frame)+15, SW/2-50, 44);
     [view addSubview:btn];
     [btn setTitle:@"我的收藏" forState: UIControlStateNormal];
+    btn.backgroundColor = [UIColor redColor];
     [btn addTarget:self action:@selector(btn) forControlEvents:UIControlEventTouchUpInside];
     [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     
@@ -96,7 +98,8 @@
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeSystem];
     btn1.frame = CGRectMake(CGRectGetMaxX(btn.frame), CGRectGetMaxY(view1.frame)+15, SW/2-50, 44);
     [view addSubview:btn1];
-    [btn1 setTitle:@"我的评论" forState: UIControlStateNormal];
+    btn1.backgroundColor = [UIColor greenColor];
+    [btn1 setTitle:@"我的缓存" forState: UIControlStateNormal];
     [btn1 addTarget:self action:@selector(btn1) forControlEvents:UIControlEventTouchUpInside];
     [btn1 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     
@@ -111,16 +114,17 @@
     [view addSubview:lineView1];
     
     
-    NSArray *titleNames = @[@"我的缓存",@"功能开关",@"我要投稿",@"更多应用"];
+    NSArray *titleNames = @[@"清除缓存",@"功能开关",@"我要投稿",@""];
     
     for (int i = 0 ; i < 4; i++) {
         
         UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn2.frame = CGRectMake(0,i*95+CGRectGetMaxY(view.frame),SW,95);
+        btn2.frame = CGRectMake(0,i*SH*0.11+CGRectGetMaxY(btn.frame)+SH*0.01,SW,SH*0.1);
         
         [btn2 setTitle:titleNames[i] forState: UIControlStateNormal];
         [btn2 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         btn2.tag = i+1;
+        btn2.backgroundColor = [UIColor blueColor];
         [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_scrollView addSubview:btn2];
         
@@ -252,14 +256,9 @@
             break;
         case 4:
         {
-            
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms://itunes.apple.com/gb/app/yi-dong-cai-bian/id391945719?mt=8"]];
+
         }
-            
-            
             break;
-            
-            
         default:
             break;
     }

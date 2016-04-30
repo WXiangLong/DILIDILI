@@ -31,7 +31,7 @@
     
     self.titleLabel.text = [NSString stringWithFormat:@"%@",model.title];
     
-    self.categoryAndTimeLabel.text = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,model.duration/60,model.duration%60];
+    self.categoryAndTimeLabel.text = [NSString stringWithFormat:@"#%@ / %02ld'%02ld''",model.category,[model.duration integerValue]/60,[model.duration integerValue]%60];
     
     self.categoryAndTimeLabel.font = [UIFont fontWithName:@"fzltzchjwgb10" size:15];
     

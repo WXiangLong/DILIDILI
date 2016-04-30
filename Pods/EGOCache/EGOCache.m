@@ -119,7 +119,7 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 		
 		[_cacheInfo removeObjectsForKeys:removedKeys];
 		self.frozenCacheInfo = _cacheInfo;
-		[self setDefaultTimeoutInterval:86400];
+		[self setDefaultTimeoutInterval:3600];
 	}
 	
 	return self;

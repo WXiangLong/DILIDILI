@@ -22,7 +22,7 @@
 
 @property (nonatomic, copy) NSString *category;
 
-@property (nonatomic, assign) NSInteger duration;
+@property (nonatomic, assign) NSString * duration;
 
 @property (nonatomic, copy) NSString *playUrl;
 
